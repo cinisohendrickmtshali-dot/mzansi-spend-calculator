@@ -218,3 +218,12 @@ clearAllBtn.addEventListener('click', () => {
 
 // Run Init on Load
 init();
+
+// Register Service Worker for Offline PWA Support
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+            .then(() => console.log('Offline mode activated!'))
+            .catch(err => console.log('Service Worker registration failed:', err));
+    });
+}
