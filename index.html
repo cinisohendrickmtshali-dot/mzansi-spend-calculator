@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MzansiSpend | South African Expense Tracker</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-emerald-700 text-white shadow-md">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-wallet text-2xl text-emerald-300"></i>
+                <h1 class="text-xl font-bold tracking-wide">Mzansi<span class="text-emerald-300">Spend</span></h1>
+            </div>
+            <span class="text-xs bg-emerald-800 px-3 py-1 rounded-full font-medium border border-emerald-600">ZAR (R) Tracker</span>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 py-6 w-full flex-grow grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Left Column: Summary & Add Transaction Form -->
+        <div class="md:col-span-1 space-y-6">
+            
+            <!-- Summary Card -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 space-y-4">
+                <h2 class="text-sm font-semibold uppercase text-slate-400 tracking-wider">Monthly Overview</h2>
+                <div class="flex justify-between items-center pb-3 border-b border-slate-100">
+                    <div>
+                        <p class="text-xs text-slate-500">Total Balance</p>
+                        <p id="totalBalance" class="text-xl font-bold text-slate-900">R0.00</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-slate-500">Total Spent</p>
+                        <p id="totalSpent" class="text-xl font-bold text-rose-600">R0.00</p>
+                    </div>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500">Total Income</p>
+                    <p id="totalIncome" class="text-lg font-semibold text-emerald-600">R0.00</p>
+                </div>
+            </div>
+
+            <!-- Add Transaction Form -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                <h2 class="text-sm font-semibold uppercase text-slate-400 tracking-wider mb-4">Add Transaction</h2>
+                <form id="transactionForm" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Type</label>
+                        <select id="type" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <option value="expense">Expense (Money Out)</option>
+                            <option value="income">Income (Money In)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Description / Store</label>
+                        <input type="text" id="description" required placeholder="e.g., Checkers, Uber, Salary" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Amount (R)</label>
+                        <input type="number" step="0.01" id="amount" required placeholder="0.00" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Category</label>
+                        <select id="category" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-lg p-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <option value="Groceries & Food">🛒 Groceries & Food</option>
+                            <option value="Transport & Travel">🚗 Transport & Travel</option>
+                            <option value="Utilities & Airtime">⚡ Utilities & Airtime</option>
+                            <option value="Leisure & Eating Out">🍔 Leisure & Eating Out</option>
+                            <option value="Bills & Debt">💡 Bills & Debt</option>
+                            <option value="Income / Stipend">💰 Income / Stipend</option>
+                            <option value="Other">📦 Other</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 rounded-lg text-sm transition shadow-sm">
+                        Add Transaction
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Right Column: Graphs & Transaction History -->
+        <div class="md:col-span-2 space-y-6">
+            
+            <!-- Visual Bar Graph Card -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-sm font-semibold uppercase text-slate-400 tracking-wider">Spending by Category</h2>
+                    <span class="text-xs text-slate-400">Bar Analytics</span>
+                </div>
+                <div class="relative h-64 w-full">
+                    <canvas id="spendingChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Transaction History Card -->
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-sm font-semibold uppercase text-slate-400 tracking-wider">Recent Transactions</h2>
+                    <button id="clearAll" class="text-xs text-rose-500 hover:text-rose-700 font-medium transition">Clear All</button>
+                </div>
+                <div class="overflow-x-auto max-h-72 overflow-y-auto pr-1">
+                    <ul id="transactionList" class="divide-y divide-slate-100">
+                        <!-- Dynamically populated -->
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100 py-4 mt-8 text-center text-xs text-slate-400">
+        MzansiSpend &bull; Built for South African Consumers
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
