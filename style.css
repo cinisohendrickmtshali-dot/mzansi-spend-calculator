@@ -16,7 +16,6 @@ input:focus, select:focus {
     border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb {
-    cbd: #cbd5e1;
     background: #cbd5e1;
     border-radius: 4px;
 }
