@@ -1,0 +1,25 @@
+/* Custom smooth scroll and subtle focus enhancements */
+html {
+    scroll-behavior: smooth;
+}
+
+input:focus, select:focus {
+    outline: none;
+}
+
+/* Custom scrollbar for transaction history */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+    cbd: #cbd5e1;
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
